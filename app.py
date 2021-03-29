@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from linebot import LineBotApi
 from linebot.models import TextSendMessage
 from linebot.exceptions import LineBotApiError
@@ -12,8 +12,13 @@ def hello_world():
     return 'Hello World!'
 
 
-@app.route('/line')
+@app.route('/line', methods=['POST'])
 def push_notice():
+    post_data = request.get_data()  # type: str
+    print(post_data)
+    text = request.form.get('text')
+    print(text)
+
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     try:
         line_bot_api.push_message(USER_ID, TextSendMessage(text='Hello World!'))
