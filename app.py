@@ -14,8 +14,8 @@ def hello_world():
 
 @app.route('/line', methods=['POST'])
 def push_notice():
-    post_data = request.get_data()  # type: str
-    print(post_data.encode().decode('unicode-escape'))
+    post_data = request.get_data()
+    print(post_data.decode('unicode-escape'))
 
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     try:
