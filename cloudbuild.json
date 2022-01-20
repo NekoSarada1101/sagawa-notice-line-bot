@@ -1,0 +1,19 @@
+{
+    "steps": [
+        {
+            "name": "gcr.io/google.com/cloudsdktool/cloud-sdk",
+            "args": [
+                "gcloud",
+                "functions",
+                "deploy",
+                [
+                    "sagawa-notice-line-bot"
+                ],
+                "--region=asia-northeast1",
+                "--source=.",
+                "--trigger-topic sagawa-notice-line-bot",
+                "--runtime=python39"
+            ]
+        }
+    ]
+}
