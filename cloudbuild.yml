@@ -18,4 +18,4 @@ steps:
       - --source=.
       - --trigger-topic=sagawa-notice-line-bot
       - --runtime=python39
-      - --entry-point push_notice
+      - --entry-point=push_notice
