@@ -213,3 +213,5 @@ $RECYCLE.BIN/
 
 # custom
 settings.py
+credentials.json
+token.json
