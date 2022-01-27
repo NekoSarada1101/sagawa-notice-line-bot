@@ -44,9 +44,13 @@ def push_notice(event, context):
         if messages_data['resultSizeEstimate'] == 0:
             print('No Data')
             return
-        print('Labels:')
-        for label in labels:
-            print(label['name'])
+
+        # メールの本文を取得する
+        for message_id in messages_data['messages']:
+            detail = service.users().messages().get(userId='me', id=message_id['id']).execute()
+            decoded_bytes = base64.urlsafe_b64decode(detail["payload"]["body"]["data"])
+            decoded_message = decoded_bytes.decode("UTF-8")
+            print(decoded_message)
 
     except HttpError as error:
         # TODO(developer) - Handle errors from gmail API.
