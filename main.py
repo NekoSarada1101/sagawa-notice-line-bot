@@ -41,8 +41,8 @@ def push_notice(event, context):
         messages_data = service.users().messages().list(userId='me', q='from:info@ds.sagawa-exp.co.jp after:{}'.format(now)).execute()
         print(messages_data)
 
-        if not labels:
-            print('No labels found.')
+        if messages_data['resultSizeEstimate'] == 0:
+            print('No Data')
             return
         print('Labels:')
         for label in labels:
