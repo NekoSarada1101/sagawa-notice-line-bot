@@ -11,7 +11,7 @@ from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
 from linebot.models import TextSendMessage
 
-from settings import *
+from settings import CHANNEL_ACCESS_TOKEN, USER_ID
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
