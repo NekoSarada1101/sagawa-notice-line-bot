@@ -1,16 +1,17 @@
-# from linebot import LineBotApi
-# from linebot.models import TextSendMessage
-# from linebot.exceptions import LineBotApiError
-# from settings import *
-import os
 import base64
-from email import message
+import os
+from datetime import datetime, timedelta, timezone
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from datetime import datetime, timedelta, timezone
+from linebot import LineBotApi
+from linebot.exceptions import LineBotApiError
+from linebot.models import TextSendMessage
+
+from settings import *
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
@@ -52,28 +53,25 @@ def push_notice(event, context):
             detail = service.users().messages().get(userId='me', id=message_id['id']).execute()
             decoded_bytes = base64.urlsafe_b64decode(detail["payload"]["body"]["data"])
             decoded_message = decoded_bytes.decode("UTF-8")
-            print(decoded_message)
 
-        # results = service.users().labels().list(userId='me').execute()
-        # labels = results.get('labels', [])
+            # メール本文を整形する
+            decoded_message = decoded_message.replace('　', '')
+            decoded_message_arr = decoded_message.split('\r\n')
+            notice_message = ''
+            for index, message_row in enumerate(decoded_message_arr):
+                if 5 <= index <= 16:
+                    notice_message += message_row + '\n'
 
-        # if not labels:
-        #     print('No labels found.')
-        #     return
-        # print('Labels:')
-        # for label in labels:
-        #     print(label['name'])
+            # LINEに通知
+            line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+            try:
+                line_bot_api.push_message(USER_ID, TextSendMessage(text=notice_message))
+            except LineBotApiError as e:
+                print(e)
 
     except HttpError as error:
         # TODO(developer) - Handle errors from gmail API.
         print(f'An error occurred: {error}')
-
-    # line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
-    # try:
-    #     line_bot_api.push_message(USER_ID, TextSendMessage(text=post_data))
-    # except LineBotApiError as e:
-    #     print(e)
-    return "line"
 
 
 if __name__ == '__main__':
