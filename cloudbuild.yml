@@ -12,8 +12,8 @@ steps:
     args:
       - kms
       - decrypt
-      - "--ciphertext-file=credentials.json.enc"
-      - "--plaintext-file=credentials.json"
+      - "--ciphertext-file=cloud_storage_credentials.json.enc"
+      - "--plaintext-file=cloud_storage_credentials.json"
       - "--location=global"
       - "--keyring=line-bot"
       - "--key=sagawa-notice-line-bot"
@@ -21,8 +21,8 @@ steps:
     args:
       - kms
       - decrypt
-      - "--ciphertext-file=token.json.enc"
-      - "--plaintext-file=token.json"
+      - "--ciphertext-file=gmail_api_credentials.json.enc"
+      - "--plaintext-file=gmail_api_credentials.json"
       - "--location=global"
       - "--keyring=line-bot"
       - "--key=sagawa-notice-line-bot"
