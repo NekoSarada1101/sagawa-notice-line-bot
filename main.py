@@ -50,6 +50,7 @@ def push_notice(event, context):
         # Save the credentials for the next run
         with open('/tmp/token.json', 'w') as token:
             token.write(creds.to_json())
+        blob.upload_from_filename('/tmp/token.json')
 
     try:
         # 実行時から30分前の佐川配達通知メールを取得する
