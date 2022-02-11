@@ -7,6 +7,7 @@ from google.auth.transport.requests import Request
 from google.cloud import storage
 from google.oauth2 import service_account
 from google.oauth2.credentials import Credentials
+from google.api_core.exceptions import NotFound
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -30,9 +31,12 @@ def push_notice(event, context):
     """Shows basic usage of the Gmail API.
     Lists the user's Gmail labels.
     """
-    bucket = client.get_bucket('sagawa-notice-line-bot')
-    blob = bucket.blob('token.json')
-    blob.download_to_filename("/tmp/token.json")
+    try:
+        bucket = client.get_bucket('sagawa-notice-line-bot')
+        blob = bucket.blob('token.json')
+        blob.download_to_filename("/tmp/token.json")
+    except NotFound as error:
+        print(error)
 
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
