@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 from google.auth.transport.requests import Request
 from google.cloud import storage
-from google.oauth2 import service_account
+from google.cloud import secretmanager
 from google.oauth2.credentials import Credentials
 from google.api_core.exceptions import NotFound
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -15,15 +15,12 @@ from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
 from linebot.models import TextSendMessage
 
-from settings import CHANNEL_ACCESS_TOKEN, USER_ID
 
-service_account_info = json.load(open('cloud_storage_credentials.json'))
-credentials = service_account.Credentials.from_service_account_info(service_account_info)
-client = storage.Client(
-    credentials=credentials,
-    project=credentials.project_id,
-)
+storage_client = storage.Client()
+secret_client = secretmanager.SecretManagerServiceClient()
 
+CHANNEL_ACCESS_TOKEN = secret_client.access_secret_version(request={'name': 'projects/slackbot-288310/secrets/SAGAWA_NOTICE_LINE_CHANNEL_ACCESS_TOKEN/versions/1'})
+USER_ID = secret_client.access_secret_version(request={'name': 'projects/slackbot-288310/secrets/LINE_USER_ID/versions/1'})
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 
@@ -32,7 +29,7 @@ def push_notice(event, context):
     Lists the user's Gmail labels.
     """
     try:
-        bucket = client.get_bucket('sagawa-notice-line-bot')
+        bucket = storage_client.get_bucket('sagawa-notice-line-bot')
         blob = bucket.blob('token.json')
         blob.download_to_filename("/tmp/token.json")
     except NotFound as error:
