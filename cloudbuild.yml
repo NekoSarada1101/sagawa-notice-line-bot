@@ -19,3 +19,4 @@ steps:
       - --trigger-topic=sagawa-notice-line-bot
       - --runtime=python39
       - --entry-point=push_notice
+      - --service-account=sagawa-notice-line-bot@slackbot-288310.iam.gserviceaccount.com
