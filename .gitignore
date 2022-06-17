@@ -215,3 +215,4 @@ $RECYCLE.BIN/
 settings.py
 cloud_storage_credentials.json
 gmail_api_credentials.json
+sagawa_notice_line_bot_credentials.json
