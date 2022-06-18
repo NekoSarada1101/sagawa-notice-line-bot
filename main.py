@@ -18,8 +18,12 @@ from linebot.models import TextSendMessage
 storage_client = storage.Client()
 secret_client = secretmanager.SecretManagerServiceClient()
 
-CHANNEL_ACCESS_TOKEN = secret_client.access_secret_version(request={'name': 'projects/slackbot-288310/secrets/SAGAWA_NOTICE_LINE_CHANNEL_ACCESS_TOKEN/versions/1'})
-USER_ID = secret_client.access_secret_version(request={'name': 'projects/slackbot-288310/secrets/LINE_USER_ID/versions/1'})
+token_secret_name = secret_client.secret_version_path('slackbot-288310', 'SAGAWA_NOTICE_LINE_CHANNEL_ACCESS_TOKEN', '1')
+CHANNEL_ACCESS_TOKEN = secret_client.access_secret_version(request={'name': token_secret_name})
+
+id_secret_name = secret_client.secret_version_path('slackbot-288310', 'LINE_USER_ID', '1')
+USER_ID = secret_client.access_secret_version(request={'name': id_secret_name})
+
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 
