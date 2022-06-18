@@ -31,6 +31,7 @@ def push_notice(event, context):
     """Shows basic usage of the Gmail API.
     Lists the user's Gmail labels.
     """
+    print('***** start sagawa notice line bot *****')
     try:
         bucket = storage_client.get_bucket('sagawa-notice-line-bot')
         blob = bucket.blob('token.json')
@@ -61,7 +62,7 @@ def push_notice(event, context):
         service = build('gmail', 'v1', credentials=creds)
         now = (datetime.now(timezone(timedelta(hours=+9), 'JST')) + timedelta(minutes=-30)).strftime('%Y/%m/%d')
         messages_data = service.users().messages().list(userId='me', q='from:info@ds.sagawa-exp.co.jp after:{}'.format(now)).execute()
-        print(messages_data)
+        print('messages_data={}'.format(messages_data))
 
         if messages_data['resultSizeEstimate'] == 0:
             print('No Data')
@@ -91,6 +92,8 @@ def push_notice(event, context):
     except HttpError as error:
         # TODO(developer) - Handle errors from gmail API.
         print(f'An error occurred: {error}')
+
+    print('***** end sagawa notice line bot *****')
 
 
 if __name__ == '__main__':
